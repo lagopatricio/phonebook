@@ -37,6 +37,12 @@ app.get('/info', (req, res) =>{
     )
 })
 
+app.get('/api/phonebook/:id', (req, res) =>{
+  const id = req.params.id;
+  const contact = phonebook.find(contact => contact.id === id);
+  res.json(contact);
+})
+
 const PORT = 3001;
 
 app.listen(PORT, () =>{
