@@ -28,6 +28,15 @@ app.get('/api/phonebook', (req, res) =>{
   res.json(phonebook);
 })
 
+app.get('/info', (res, req) =>{
+  res.send(
+    `
+    <p>Phonebook has info for ${phonebook.length} contacts.</p>
+    <p>${new Date()}</p>
+    `
+    )
+})
+
 const PORT = 3001;
 
 app.listen(PORT, () =>{
