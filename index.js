@@ -28,7 +28,7 @@ app.get('/api/phonebook', (req, res) =>{
   res.json(phonebook);
 })
 
-app.get('/info', (res, req) =>{
+app.get('/info', (req, res) =>{
   res.send(
     `
     <p>Phonebook has info for ${phonebook.length} contacts.</p>
