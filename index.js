@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const app = express();
 
 app.use(express.json());
+app.use(express.static('build'));
 
 morgan.token('content', function getContent (req){
   return JSON.stringify(req.body)
@@ -21,25 +22,33 @@ app.use(morgan(function (tokens, req, res) {
 }));
 
 let phonebook = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
+  {
+    'data':{
+      "name": "Arto Hellas", 
+      "number": "040-123456"
+    },
+    "id": 1
+  },
+  {
+    'data':{
+      "name": "Ada Lovelace", 
+      "number": "39-44-5323523"
+    },
+    "id": 2
   },
   { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
+    'data':{
+      "name": "Dan Abramov", 
+      "number": "12-43-234345"
+    },
+    "id": 3
   },
   { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
+    'data':{
+      "name": "Mary Poppendieck", 
+      "number": "39-23-6423122"
+    },
+    "id": 4
   }
 ]
 
@@ -71,23 +80,24 @@ app.delete('/api/phonebook/:id', (req, res) =>{
 app.post('/api/phonebook', (req, res) =>{
   const id = Math.floor(Math.random() * 10000000000) + 1;
   const newContact = req.body;
+  const newContactData = newContact.data;
 
-  if(!newContact.name){
+  if(!newContactData.name){
     return res.status(400).json({
       error: 'Please input a name'
     })
-  } else if(phonebook.find(contact => contact.name === newContact.name)){
+  } else if(phonebook.find(contact => contact.data.name === newContactData.name)){
     return res.status(400).json({
-      error: `Contact with name ${newContact.name} already exists.`
+      error: `Contact with name ${newContactData.name} already exists.`
     })
   }
 
-  newContact.id = id;
+  req.body.id = id;
   phonebook = phonebook.concat(newContact);
   res.json(newContact);
 })
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () =>{
   console.log(`Server running on port ${PORT}.`);
