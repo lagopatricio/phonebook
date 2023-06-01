@@ -51,9 +51,9 @@ app.get('/api/phonebook/:id', (req, res) =>{
 // })
 
 app.post('/api/phonebook', (req, res) =>{
-  const newContact = req.body.data;
+  const newContact = req.body;
 
-  if (newContact.name.length < 1 || newContact.name === undefined){
+  if (newContact.data.name.length < 1 || newContact.data.name === undefined){
     return res.status(400).json({ error: 'Please input a name.' })
   }
 
