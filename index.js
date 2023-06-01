@@ -52,15 +52,16 @@ app.get('/api/phonebook/:id', (req, res) =>{
 
 app.post('/api/phonebook', (req, res) =>{
   const newContact = req.body;
+  const newContactData = newContact.data
 
-  if (newContact.data.name.length < 1 || newContact.data.name === undefined){
+  if (newContactData.name.length < 1 || newContactData.name === undefined){
     return res.status(400).json({ error: 'Please input a name.' })
   }
 
   const contact = new Contact({
     data:{
-      name: newContact.name, 
-      number: newContact.number,
+      name: newContactData.name, 
+      number: newContactData.number,
     }
   })
 
