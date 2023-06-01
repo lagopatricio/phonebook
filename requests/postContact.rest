@@ -2,6 +2,8 @@ POST http://localhost:3001/api/phonebook
 Content-Type: application/json
 
 {
-  "name": "asdf zxcv", 
-  "number": "123456789"
+  "data":{
+    "name": "Mary Poppendieck",
+    "number": "39-23-6423122"
+  }
 }
