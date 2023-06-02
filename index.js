@@ -31,15 +31,6 @@ app.get('/api/phonebook', (req, res, next) =>{
     .catch(err => next(err))
 })
 
-// app.get('/info', (req, res) =>{
-//   res.send(
-//     `
-//     <p>Phonebook has info for ${phonebook.length} contacts.</p>
-//     <p>${new Date()}</p>
-//     `
-//     )
-// })
-
 app.get('/api/phonebook/:id', (req, res, next) =>{
   Contact.findById(req.params.id)
     .then(contact => {
@@ -62,7 +53,11 @@ app.post('/api/phonebook', (req, res, next) =>{
 
   if (newContactData.name.length < 1 || newContactData.name === undefined){
     return res.status(400).json({ error: 'Please input a name.' })
+  } else if (newContactData.number.length < 1 || newContactData.number === undefined){
+    return res.status(400).json({ error: 'Please input a number.' })
   }
+
+  console.log(Contact.find({data:{name:newContactData.name}}));
 
   const contact = new Contact({
     data:{
