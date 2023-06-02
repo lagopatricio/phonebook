@@ -57,7 +57,7 @@ app.post('/api/phonebook', (req, res, next) =>{
     return res.status(400).json({ error: 'Please input a number.' })
   }
 
-  console.log(Contact.find({data:{name:newContactData.name}}));
+  console.log(Contact.find());
 
   const contact = new Contact({
     data:{
