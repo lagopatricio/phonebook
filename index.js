@@ -26,6 +26,7 @@ app.use(morgan(function (tokens, req, res) {
 app.get('/api/phonebook', (req, res, next) =>{
   Contact.find({})
     .then(contacts => {
+      console.log(Contact.find({data:{name:newContactData.name}}));
       res.json(contacts);
     })
     .catch(err => next(err))
@@ -56,8 +57,6 @@ app.post('/api/phonebook', (req, res, next) =>{
   } else if (newContactData.number.length < 1 || newContactData.number === undefined){
     return res.status(400).json({ error: 'Please input a number.' })
   }
-
-  console.log(Contact.find());
 
   const contact = new Contact({
     data:{
