@@ -26,8 +26,9 @@ app.use(morgan(function (tokens, req, res) {
 app.get('/api/phonebook', (req, res, next) =>{
   Contact.find({})
     .then(contacts => {
-      console.log(Contact.find({data:{name:newContactData.name}}));
       res.json(contacts);
+      Contact.find({data:{name:'Patricio Lago'}})
+        .then(result => console.log(result))
     })
     .catch(err => next(err))
 })
