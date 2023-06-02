@@ -5,8 +5,8 @@ const Contact = require('./models/contact');
 
 const app = express();
 
-app.use(express.json());
 app.use(express.static('build'));
+app.use(express.json());
 
 morgan.token('content', function getContent (req){
   return JSON.stringify(req.body)
@@ -23,10 +23,12 @@ app.use(morgan(function (tokens, req, res) {
   ].join(' ')
 }));
 
-app.get('/api/phonebook', (req, res) =>{
-  Contact.find({}).then(contacts => {
-    res.json(contacts);
-  })
+app.get('/api/phonebook', (req, res, next) =>{
+  Contact.find({})
+    .then(contacts => {
+      res.json(contacts);
+    })
+    .catch(err => next(err))
 })
 
 // app.get('/info', (req, res) =>{
@@ -38,21 +40,23 @@ app.get('/api/phonebook', (req, res) =>{
 //     )
 // })
 
-app.get('/api/phonebook/:id', (req, res) =>{
-  Contact.findById(req.params.id).then(contact => {
-    res.json(contact);
-  })
+app.get('/api/phonebook/:id', (req, res, next) =>{
+  Contact.findById(req.params.id)
+    .then(contact => {
+      res.json(contact);
+    })
+    .catch(err => next(err))
 })
 
-app.delete('/api/phonebook/:id', (req, res) =>{
+app.delete('/api/phonebook/:id', (req, res, next) =>{
   Contact.findByIdAndRemove(req.params.id)
     .then(result => {
       res.status(204).end();
     })
-    .catch(err => console.log(err))
+    .catch(err => next(err))
 })
 
-app.post('/api/phonebook', (req, res) =>{
+app.post('/api/phonebook', (req, res, next) =>{
   const newContact = req.body;
   const newContactData = newContact.data
 
@@ -67,10 +71,24 @@ app.post('/api/phonebook', (req, res) =>{
     }
   })
 
-  contact.save().then(savedContact => {
-    res.json(savedContact);
-  })
+  contact.save()
+    .then(savedContact => {
+      res.json(savedContact);
+    })
+    .catch(err => next(err))
 })
+
+const errorHandler = (err, req, res, next) => {
+  console.error(err.message);
+  
+  if (err.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  } 
+  
+  next(err)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () =>{
