@@ -44,11 +44,13 @@ app.get('/api/phonebook/:id', (req, res) =>{
   })
 })
 
-// app.delete('/api/phonebook/:id', (req, res) =>{
-//   const id = Number(req.params.id);
-//   phonebook = phonebook.filter(contact => contact.id !== id);
-//   res.status(204).end();
-// })
+app.delete('/api/phonebook/:id', (req, res) =>{
+  Contact.findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end();
+    })
+    .catch(err => console.log(err))
+})
 
 app.post('/api/phonebook', (req, res) =>{
   const newContact = req.body;
