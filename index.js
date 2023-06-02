@@ -26,7 +26,6 @@ app.use(morgan(function (tokens, req, res) {
 app.get('/api/phonebook', (req, res, next) =>{
   Contact.find({})
     .then(contacts => {
-      console.log(contacts);
       res.json(contacts);
     })
     .catch(err => next(err))
@@ -68,6 +67,24 @@ app.post('/api/phonebook', (req, res, next) =>{
   contact.save()
     .then(savedContact => {
       res.json(savedContact);
+    })
+    .catch(err => next(err))
+})
+
+app.put('/api/phonebook/:id', (req, res, next) =>{
+  const updatedContact = req.body;
+  const updatedContactData = updatedContact.data
+
+  const contact = {
+    data:{
+      name: updatedContactData.name, 
+      number: updatedContactData.number,
+    }
+  }
+
+  Contact.findByIdAndUpdate(req.params.id, contact, {new: true})
+    .then(result =>{
+      res.json(result)
     })
     .catch(err => next(err))
 })
