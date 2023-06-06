@@ -31,6 +31,15 @@ app.get('/api/phonebook', (req, res, next) =>{
     .catch(err => next(err))
 })
 
+app.get('/info', (req, res, next) =>{
+  Contact.find({})
+    .then(contacts => {
+      res.send(`<p>The phonebook contains ${Object.keys(contacts).length} contacts.</p>
+                <p>${new Date}</p>`);
+    })
+    .catch(err => next(err))
+})
+
 app.get('/api/phonebook/:id', (req, res, next) =>{
   Contact.findById(req.params.id)
     .then(contact => {
