@@ -91,7 +91,7 @@ app.put('/api/phonebook/:id', (req, res, next) =>{
     }
   }
 
-  Contact.findByIdAndUpdate(req.params.id, contact, {new: true})
+  Contact.findByIdAndUpdate(req.params.id, contact, {new: true, runValidators: true, context: 'query'})
     .then(result =>{
       res.json(result)
     })
@@ -103,7 +103,9 @@ const errorHandler = (err, req, res, next) => {
   
   if (err.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (err.name === 'ValidationError') {
+    return res.status(400).json({ error: 'Name must be 3 characters or longer.' })
+  }
   
   next(err)
 }
