@@ -99,15 +99,7 @@ app.put('/api/phonebook/:id', (req, res, next) =>{
 })
 
 const errorHandler = (err, req, res, next) => {
-  console.error(err.message);
-  
-  if (err.name === 'CastError') {
-    return res.status(400).send({ error: 'malformatted id' })
-  } else if (err.name === 'ValidationError') {
-    return res.status(400).json({ error: 'Name must be 3 characters or longer.' })
-  }
-  
-  next(err)
+  return res.status(400).json({ error: err.message})
 }
 
 app.use(errorHandler)
